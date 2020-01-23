@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CrawlController {
 
 
-    @RequestMapping(path = "/crawl/", method = RequestMethod.POST)
+    @RequestMapping(path = "/crawl/urls/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.lipsum.com/")
     @ResponseBody
     public String getLinks(@RequestBody String url) {
