@@ -61,8 +61,8 @@ public class CrawlController {
         return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
     }
 
-    @RequestMapping(path = "/turkeytop50/", method = RequestMethod.GET)
-    @ApiOperation(value = "Retrieve Alexa top 50 Turkey sites")
+    @RequestMapping(path = "/alexa/turkeytop50/", method = RequestMethod.GET)
+    @ApiOperation(value = "Retrieve Alexa top 50 Turkey sites" ,notes = "https://www.alexa.com/topsites/countries/TR")
     @ResponseBody
     public String alexaTop50() {
         long start = System.currentTimeMillis();
@@ -88,6 +88,36 @@ public class CrawlController {
 
             return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
         }
+
+    @RequestMapping(path = "/similarweb/turkeytop50/", method = RequestMethod.GET)
+    @ApiOperation(value = "Retrieve Similarweb top 50 Turkey sites" , notes = "https://www.similarweb.com/top-websites/turkey")
+    @ResponseBody
+    public String  similarWebTop50()
+    {long start = System.currentTimeMillis();
+    String result = "";
+    Document doc = null;
+        try {
+        doc = Jsoup.connect("https://www.similarweb.com/top-websites/turkey").get();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+        for (int index = 1; index <= 51; index++) {
+        Elements links = doc.select("  body > div.wrapperBody--topRanking.wrapper-body.js-wrapperBody > main > div > section.topRankingSection > div > div.topWebsites-table > div.topRankingGrid > table > tbody > tr:nth-child("+String.valueOf(index)+") > td.topRankingGrid-cell.topWebsitesGrid-cellWebsite.showInMobile > div > a.topRankingGrid-title.js-tooltipTarget");
+
+        for (
+                Element link : links) {
+            result += ("\nSiteinfo : " + link.attr("href"));
+            result += ("  link : " + link.text());
+            
+        }
+
+    }
+    long finish = System.currentTimeMillis();
+    long timeElapsed = finish - start;
+
+            return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
+}
 
 }
 
