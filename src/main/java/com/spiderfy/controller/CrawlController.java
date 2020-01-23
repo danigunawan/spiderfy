@@ -29,7 +29,7 @@ public class CrawlController {
         for (
                 Element link : links) {
             result += ("\nlink : " + link.attr("href"));
-            result += ("text : " + link.text());
+            result += ("  text : " + link.text());
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
@@ -53,7 +53,7 @@ public class CrawlController {
         for (
                 Element link : links) {
             result += ("\nloc : " + link.attr("loc"));
-            result += ("text : " + link.text());
+            result += ("  text : " + link.text());
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
