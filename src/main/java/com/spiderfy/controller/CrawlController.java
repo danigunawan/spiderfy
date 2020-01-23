@@ -16,7 +16,7 @@ public class CrawlController {
     @RequestMapping(path = "/crawl/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all links ", notes = "Ex: http://hurriyet.com.tr")
     @ResponseBody
-    public String root(@RequestBody String url) {
+    public String getLinks(@RequestBody String url) {
         long start = System.currentTimeMillis();
         String result = "";
         Document doc = null;
@@ -143,6 +143,34 @@ public class CrawlController {
 
             return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
 }
+
+
+    @RequestMapping(path = "/crawl/images/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain all images", notes = "Ex: http://hurriyet.com.tr")
+    @ResponseBody
+    public String getImages(@RequestBody String url) {
+        long start = System.currentTimeMillis();
+        String result = "";
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements imgs = doc.getElementsByTag("img");
+        for (
+                Element img : imgs) {
+            result += ("\nsrc : " + img.attr("src"));
+            result += ("  alt : " + img.attr("alt"));
+            result += ("  width : " + img.attr("width"));
+            result += ("  height : " + img.attr("height"));
+        }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
+    }
+
 
 }
 
