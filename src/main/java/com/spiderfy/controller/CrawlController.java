@@ -36,6 +36,31 @@ public class CrawlController {
 
         return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
     }
+    @RequestMapping(path = "/crawl/metatags/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain site metatags ", notes = "Ex: http://hurriyet.com.tr")
+    @ResponseBody
+    public String getSiteInfo(@RequestBody String url) {
+        long start = System.currentTimeMillis();
+        String result = "";
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements links = doc.getElementsByTag("meta");
+        for (
+                Element link : links) {
+            result += ("\nmeta name : " + link.attr("name"));
+            result += ("  property : " + link.attr("property"));
+            result += ("  content : " + link.attr("content"));
+
+        }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        return "Time elapsed:" + String.valueOf(timeElapsed) + "ms \n" + result;
+    }
 
     @RequestMapping(path = "/crawl/sitemap/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all sitemap nodes. " ,notes = "Ex : https://www.turkcell.com.tr/sitemap.xml , http://www.hurriyet.com.tr/sitemaps/posts.xml, http://www.hurriyet.com.tr/sitemaps/posts-2020-01.xml")
