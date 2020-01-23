@@ -14,7 +14,7 @@ public class CrawlController {
 
 
     @RequestMapping(path = "/crawl/", method = RequestMethod.POST)
-    @ApiOperation(value = "Obtain all links ")
+    @ApiOperation(value = "Obtain all links ", notes = "Ex: http://hurriyet.com.tr")
     @ResponseBody
     public String root(@RequestBody String url) {
         long start = System.currentTimeMillis();
@@ -38,7 +38,7 @@ public class CrawlController {
     }
 
     @RequestMapping(path = "/crawl/sitemap/", method = RequestMethod.POST)
-    @ApiOperation(value = "Obtain all sitemap nodes. ")
+    @ApiOperation(value = "Obtain all sitemap nodes. " ,notes = "Ex : https://www.turkcell.com.tr/sitemap.xml , http://www.hurriyet.com.tr/sitemaps/posts.xml, http://www.hurriyet.com.tr/sitemaps/posts-2020-01.xml")
     @ResponseBody
     public String sitemap(@RequestBody String siteMapUrl) {
         long start = System.currentTimeMillis();
@@ -62,7 +62,7 @@ public class CrawlController {
     }
 
     @RequestMapping(path = "/alexa/turkeytop50/", method = RequestMethod.GET)
-    @ApiOperation(value = "Retrieve Alexa top 50 Turkey sites" ,notes = "https://www.alexa.com/topsites/countries/TR")
+    @ApiOperation(value = "Retrieve Alexa top 50 Turkey sites" ,notes = "Based on: https://www.alexa.com/topsites/countries/TR")
     @ResponseBody
     public String alexaTop50() {
         long start = System.currentTimeMillis();
@@ -90,7 +90,7 @@ public class CrawlController {
         }
 
     @RequestMapping(path = "/similarweb/turkeytop50/", method = RequestMethod.GET)
-    @ApiOperation(value = "Retrieve Similarweb top 50 Turkey sites" , notes = "https://www.similarweb.com/top-websites/turkey")
+    @ApiOperation(value = "Retrieve Similarweb top 50 Turkey sites" , notes = "Based on: https://www.similarweb.com/top-websites/turkey")
     @ResponseBody
     public String  similarWebTop50()
     {long start = System.currentTimeMillis();
@@ -109,7 +109,7 @@ public class CrawlController {
                 Element link : links) {
             result += ("\nSiteinfo : " + link.attr("href"));
             result += ("  link : " + link.text());
-            
+
         }
 
     }
