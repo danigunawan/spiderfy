@@ -30,8 +30,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiEndPointsInfo() {
 
-        return new ApiInfoBuilder().title("Spiderfy Crawler REST API").description("Spiderfy Crawler REST API")
-                .license("Apache 2.0").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+          return new ApiInfoBuilder().title("Spiderfy Crawler REST API").description("Spiderfy Crawler REST API")
+                .license("Apache 2.0").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html").contact(new Contact("Fatih Yıldızlı","",""))
                 .version("1.0-SNAPSHOT").build();
     }
 
