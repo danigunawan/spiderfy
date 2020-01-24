@@ -72,7 +72,6 @@ public class CrawlService {
         SitemapModelResponse response = new SitemapModelResponse();
         List<SitemapModel> items = new ArrayList<SitemapModel>();
         long start = System.currentTimeMillis();
-        String result = "";
         Document doc = null;
         try {
             doc = Jsoup.connect(siteMapUrl).get();
@@ -99,7 +98,6 @@ public class CrawlService {
         ImageModelResponse response = new ImageModelResponse();
         List<ImageModel> items = new ArrayList<ImageModel>();
         long start = System.currentTimeMillis();
-        String result = "";
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
