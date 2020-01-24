@@ -40,7 +40,7 @@ public class AnalyticService {
                 responseItem.setRank(String.valueOf(index-1));
                 responseItem.setSiteInfo(link.attr("href")==null ? "null": String.format(ALEXA_INFO_PREFIX+link.attr("href")));
                 responseItem.setLink(link.text()==null ?"null":link.text());
-
+                responseItem.setFavicon(link.getElementsByTag("img").attr("src")==null ?"null":link.getElementsByTag("img").attr("src"));
                 response.add(responseItem);
                 ALEXA_TOP_50_CSS_SELECT_QUERY.replace(String.valueOf(index),"__INDEX__");
             }
@@ -68,7 +68,7 @@ public class AnalyticService {
                 responseItem.setRank(String.valueOf(index));
                 responseItem.setSiteInfo(link.attr("href")==null ? "null":String.format(SIMILARWEB_INFO_PREFIX+link.attr("href")));
                 responseItem.setLink(link.text()==null ?"null":link.text());
-
+                responseItem.setFavicon(link.getElementsByTag("img").attr("src")==null ?"null":link.getElementsByTag("img").attr("src"));
                 response.add(responseItem);
                 SIMILARWEB_TOP_50_CSS_SELECT_QUERY.replace(String.valueOf(index),"__INDEX__");
             }
