@@ -8,7 +8,7 @@ public class AnalyticModelResponse {
     private String rank;
     private String link;
     private String siteInfo;
-
+    private String favicon;
 
 
 
