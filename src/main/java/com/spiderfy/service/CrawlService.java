@@ -18,7 +18,6 @@ public class CrawlService {
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
         long start = System.currentTimeMillis();
-        String result = "";
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
