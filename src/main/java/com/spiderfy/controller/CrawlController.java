@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class CrawlController {
 @Autowired
 CrawlService service;
-
+    @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.lipsum.com/")
     @ResponseBody
@@ -22,6 +22,7 @@ CrawlService service;
 
        return service.getLinks(url);
     }
+    @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/metatags/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain site metatags ", notes = "Ex: https://www.lipsum.com/")
     @ResponseBody
@@ -29,7 +30,8 @@ CrawlService service;
 
         return service.getSiteInfo(url);
     }
-
+    
+    @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/sitemap/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all sitemap nodes. " ,notes = "Ex : https://www.turkcell.com.tr/sitemap.xml , http://www.hurriyet.com.tr/sitemaps/posts.xml, http://www.hurriyet.com.tr/sitemaps/posts-2020-01.xml")
     @ResponseBody
@@ -38,7 +40,7 @@ CrawlService service;
         return service.sitemap(siteMapUrl);
     }
 
-
+    @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/images/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all images", notes = "Ex: https://www.lipsum.com/")
     @ResponseBody
