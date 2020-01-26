@@ -27,7 +27,7 @@ public class CrawlService {
         Elements links = doc.select("a[href]");
         for (Element link : links) {
             UrlModel item = new UrlModel();
-            item.setLink(link.attr("href"));
+            item.setLink(link.attr("href").startsWith("http")?link.attr("href"):(url+link.attr("href")));
             item.setText(link.text());
             items.add(item);
         }
@@ -107,7 +107,7 @@ public class CrawlService {
         Elements imgs = doc.getElementsByTag("img");
         for (Element img : imgs) {
             ImageModel item = new ImageModel();
-            item.setSrc(img.attr("src"));
+            item.setSrc(img.attr("src").startsWith("http")?img.attr("src"):(url+img.attr("src")));
             item.setAlt(img.attr("alt"));
             item.setWidth(img.attr("width"));
             item.setHeight(img.attr("height"));
