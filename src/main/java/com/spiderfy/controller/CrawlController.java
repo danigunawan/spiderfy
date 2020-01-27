@@ -30,7 +30,15 @@ CrawlService service;
 
         return service.getSiteInfo(url);
     }
-    
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/defaultsitemap/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain all sitemap nodes. " ,notes = "Ex : URL/sitemap.xml ")
+    @ResponseBody
+    public SitemapModelResponse defaultsitemap(@RequestBody String siteMapUrl) {
+
+        return service.defaultsitemap(siteMapUrl);
+    }
+
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/sitemap/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all sitemap nodes. " ,notes = "Ex : https://www.turkcell.com.tr/sitemap.xml , http://www.hurriyet.com.tr/sitemaps/posts.xml, http://www.hurriyet.com.tr/sitemaps/posts-2020-01.xml")
