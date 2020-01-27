@@ -14,6 +14,7 @@ import java.util.List;
 @Component
 public class CrawlService {
 
+    private final String SITEMAP_FILE_NAME="/sitemap.xml";
     public UrlModelResponse getLinks(String url) {
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
@@ -74,7 +75,7 @@ public class CrawlService {
         long start = System.currentTimeMillis();
         Document doc = null;
         try {
-            doc = Jsoup.connect(siteMapUrl).get();
+            doc = Jsoup.connect(siteMapUrl+SITEMAP_FILE_NAME).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
