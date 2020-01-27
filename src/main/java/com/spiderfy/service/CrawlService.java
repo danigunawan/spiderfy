@@ -15,6 +15,7 @@ import java.util.List;
 public class CrawlService {
 
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
+
     public UrlModelResponse getLinks(String url) {
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
@@ -69,13 +70,39 @@ public class CrawlService {
         return response;
     }
 
-    public SitemapModelResponse sitemap(String siteMapUrl) {
+    public SitemapModelResponse defaultsitemap(String siteMapUrl) {
         SitemapModelResponse response = new SitemapModelResponse();
         List<SitemapModel> items = new ArrayList<SitemapModel>();
         long start = System.currentTimeMillis();
         Document doc = null;
         try {
             doc = Jsoup.connect(siteMapUrl+SITEMAP_FILE_NAME).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements links = doc.getElementsByTag("loc");
+        for (Element link : links) {
+            SitemapModel item = new SitemapModel();
+            item.setLoc(link.attr("loc"));
+            item.setText(link.text());
+            items.add(item);
+
+        }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+        response.setResults(items);
+        return response;
+    }
+
+    public SitemapModelResponse sitemap(String siteMapUrl) {
+        SitemapModelResponse response = new SitemapModelResponse();
+        List<SitemapModel> items = new ArrayList<SitemapModel>();
+        long start = System.currentTimeMillis();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(siteMapUrl).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
