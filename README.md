@@ -3,7 +3,7 @@
 
 --This project is only proof of concepts, does not relate commercial use.
 
-**Frontend UI :** https://crawler-is64e81hn.now.sh/  
+**Frontend UI :** https://crawler.muradjs.now.sh/#
 **Github repo:** https://github.com/muratumutlu/crawler-ui-reactjs 
 - React.js
 - Bootstrap
