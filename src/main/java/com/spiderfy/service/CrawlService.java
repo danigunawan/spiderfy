@@ -149,4 +149,32 @@ public class CrawlService {
         response.setResults(items);
         return response;
     }
+    
+    
+    public TextModelResponse getText(String url) {
+        TextModelResponse response = new TextModelResponse();
+        List<TextModel> items = new ArrayList<TextModel>();
+        long start = System.currentTimeMillis();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String body = doc.body().text();
+        String html = doc.html();
+        TextModel item = new TextModel();
+        item.setAllText(body);
+        item.setAllHtml(html);
+        items.add(item);
+
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+        response.setResults(items);
+        return response;
+    }
+    
+    
 }
