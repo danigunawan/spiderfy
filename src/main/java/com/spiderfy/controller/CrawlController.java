@@ -56,6 +56,16 @@ CrawlService service;
 
         return service.getImages(url);
     }
+    
+    
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/text/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain get title and html.")
+    @ResponseBody
+    public TextModelResponse getText(@RequestBody String url) {
+
+        return service.getText(url);
+    }
 
 
 }
