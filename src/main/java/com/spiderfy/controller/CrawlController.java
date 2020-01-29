@@ -1,9 +1,6 @@
 package com.spiderfy.controller;
 
-import com.spiderfy.model.ImageModelResponse;
-import com.spiderfy.model.MetaTagsModelResponse;
-import com.spiderfy.model.SitemapModelResponse;
-import com.spiderfy.model.UrlModelResponse;
+import com.spiderfy.model.*;
 import com.spiderfy.service.CrawlService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +11,18 @@ import org.springframework.web.bind.annotation.*;
 public class CrawlController {
 @Autowired
 CrawlService service;
+
+
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.lipsum.com/")
     @ResponseBody
-    public UrlModelResponse getLinks(@RequestBody String url) {
+    public UrlModelResponse getLinks(@RequestBody String url) throws Exception {
 
        return service.getLinks(url);
     }
+
+
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/metatags/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain site metatags ", notes = "Ex: https://www.lipsum.com/")
@@ -56,8 +57,9 @@ CrawlService service;
 
         return service.getImages(url);
     }
-    
-    
+
+
+
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/text/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain get title and html.")
@@ -66,7 +68,6 @@ CrawlService service;
 
         return service.getText(url);
     }
-
 
 }
 
