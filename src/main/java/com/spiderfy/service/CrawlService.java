@@ -199,7 +199,7 @@ public class CrawlService {
     public ResponseEntity<String> changeUserAgent(String url) throws IOException {
 
         Random rand = new Random();
-        Resource resource =new ClassPathResource("classpath:user-agents");
+        Resource resource =new ClassPathResource("/user-agents");
         InputStream inputStream = resource.getInputStream();
         byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
         String data = new String(bdata, StandardCharsets.UTF_8);
@@ -225,7 +225,7 @@ public class CrawlService {
 
          try {
             
-            Resource resource =new ClassPathResource("classpath:user-agents");
+            Resource resource =new ClassPathResource("/user-agents");
             InputStream inputStream = resource.getInputStream();
             byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
             String data = new String(bdata, StandardCharsets.UTF_8);
