@@ -199,9 +199,11 @@ public class CrawlService {
     public ResponseEntity<String> changeUserAgent(String url) throws IOException {
 
         Random rand = new Random();
-        File file = ResourceUtils.getFile("classpath:user-agents");
-        String readedFile = new String(Files.readAllBytes(file.toPath()));
-        String[] userAgents = readedFile.split("\n");
+        Resource resource =new ClassPathResource("classpath:user-agents");
+        InputStream inputStream = resource.getInputStream();
+        byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
+        String data = new String(bdata, StandardCharsets.UTF_8);
+        String[] userAgents = data.split("\n");
         //randomize
         int rand_index = rand.nextInt(userAgents.length - 1) + 1;
 
