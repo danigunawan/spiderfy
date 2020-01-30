@@ -232,8 +232,10 @@ public class CrawlService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error." + e.getStackTrace());
         }
-          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+          
     }
 
 
