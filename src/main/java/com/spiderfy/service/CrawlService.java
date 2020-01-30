@@ -6,12 +6,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -96,7 +98,7 @@ public class CrawlService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         Elements links = doc.getElementsByTag("loc");
         for (Element link : links) {
             SitemapModel item = new SitemapModel();
@@ -123,7 +125,7 @@ public class CrawlService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         Elements links = doc.getElementsByTag("loc");
         for (Element link : links) {
             SitemapModel item = new SitemapModel();
@@ -244,4 +246,24 @@ public class CrawlService {
     }
 
 
-}
+    public void takeScreenShot()
+    {
+        try {
+            System.setProperty("java.awt.headless", "false");
+            Robot robot = new Robot();
+            BufferedImage bi=robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            ImageIO.write(bi, "jpg", new File("screenshot.jpg"));
+
+        } catch (AWTException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    }
+
+
+
+
