@@ -3,8 +3,12 @@ package com.spiderfy.controller;
 import com.spiderfy.model.*;
 import com.spiderfy.service.CrawlService;
 import io.swagger.annotations.ApiOperation;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 
 @RestController
@@ -69,10 +73,27 @@ CrawlService service;
         return service.getText(url);
     }
 
+
+
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/changeuseragent/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain get title and html.")
+    @ResponseBody
+    public ResponseEntity<String> changeUserAgent(@RequestBody String url) throws IOException {
+
+        return service.changeUserAgent(url);
+    }
+
+
+
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/getAllUserAgents/", method = RequestMethod.GET)
+    @ApiOperation(value = "List all user agents.")
+    @ResponseBody
+    public ResponseEntity<String> getAllUserAgents() throws IOException {
+
+        return service.getAllUserAgents();
+    }
+
+
 }
-
-
-
-
-
-
