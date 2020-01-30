@@ -24,8 +24,7 @@ import java.util.Random;
 @Component
 public class CrawlService {
 
-    @Autowired
-    ResourceLoader resourceLoader;
+ 
 
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
 
@@ -97,6 +96,7 @@ public class CrawlService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert doc != null;
         Elements links = doc.getElementsByTag("loc");
         for (Element link : links) {
             SitemapModel item = new SitemapModel();
@@ -123,6 +123,7 @@ public class CrawlService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert doc != null;
         Elements links = doc.getElementsByTag("loc");
         for (Element link : links) {
             SitemapModel item = new SitemapModel();
