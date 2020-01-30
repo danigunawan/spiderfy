@@ -1,22 +1,34 @@
 package com.spiderfy.service;
 
+
 import com.spiderfy.model.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
+import org.springframework.util.ResourceUtils;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 
 @Component
 public class CrawlService {
 
+    @Autowired
+    ResourceLoader resourceLoader;
+
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
 
-    public UrlModelResponse getLinks(String url) {
+    public UrlModelResponse getLinks(String url)  {
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
         long start = System.currentTimeMillis();
@@ -38,8 +50,12 @@ public class CrawlService {
 
         response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
         response.setResults(items);
+
+
+
         return response;
     }
+
 
     public MetaTagsModelResponse getSiteInfo(String url) {
         MetaTagsModelResponse response = new MetaTagsModelResponse();
@@ -149,8 +165,8 @@ public class CrawlService {
         response.setResults(items);
         return response;
     }
-    
-    
+
+
     public TextModelResponse getText(String url) {
         TextModelResponse response = new TextModelResponse();
         List<TextModel> items = new ArrayList<TextModel>();
@@ -158,23 +174,67 @@ public class CrawlService {
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
+
+            String body = doc.body().text();
+            String html = doc.html();
+            TextModel item = new TextModel();
+            item.setAllText(body);
+            item.setAllHtml(html);
+            items.add(item);
+
+            long finish = System.currentTimeMillis();
+            long timeElapsed = finish - start;
+
+            response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+            response.setResults(items);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String body = doc.body().text();
-        String html = doc.html();
-        TextModel item = new TextModel();
-        item.setAllText(body);
-        item.setAllHtml(html);
-        items.add(item);
 
-        long finish = System.currentTimeMillis();
-        long timeElapsed = finish - start;
-
-        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
-        response.setResults(items);
         return response;
     }
-    
-    
+
+
+    public ResponseEntity<String> changeUserAgent(String url) throws IOException {
+
+        Random rand = new Random();
+        File file = ResourceUtils.getFile("classpath:user-agents");
+        String readedFile = new String(Files.readAllBytes(file.toPath()));
+        String[] userAgents = readedFile.split("\n");
+        //randomize
+        int rand_index = rand.nextInt(userAgents.length - 1) + 1;
+
+        Document doc = null;
+        try {
+
+           doc = Jsoup.connect(url).userAgent(userAgents[rand_index]).get();
+
+
+           return ResponseEntity.status(HttpStatus.OK).body("User-Agent is changed. User-agent:"+ userAgents[rand_index] +"\n"+ "body:" +  doc.body().text());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error..");
+    }
+
+    public ResponseEntity<String> getAllUserAgents() throws IOException {
+
+        try {
+            File file = ResourceUtils.getFile("classpath:user-agents");
+            String userStrings = new String(Files.readAllBytes(file.toPath()));
+
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(userStrings);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+
 }
