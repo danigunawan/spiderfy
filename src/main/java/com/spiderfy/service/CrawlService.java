@@ -11,10 +11,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-import java.io.File;
+import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -199,7 +200,7 @@ public class CrawlService {
     public ResponseEntity<String> changeUserAgent(String url) throws IOException {
 
         Random rand = new Random();
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("user-agents");
+        InputStream inputStream = new URL("https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/src/main/resources/user-agents").openStream();
         byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
         String data = new String(bdata, StandardCharsets.UTF_8);
         String[] userAgents = data.split("\n");
@@ -222,9 +223,9 @@ public class CrawlService {
 
     public ResponseEntity<String> getAllUserAgents() throws IOException {
 
-         try {
-            
-            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("user-agents");
+        try {
+
+            InputStream inputStream = new URL("https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/src/main/resources/user-agents").openStream();
             byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
             String data = new String(bdata, StandardCharsets.UTF_8);
 
@@ -240,5 +241,6 @@ public class CrawlService {
         }
 
     }
+
 
 }
