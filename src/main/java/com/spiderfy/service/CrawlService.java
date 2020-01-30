@@ -221,21 +221,24 @@ public class CrawlService {
 
     public ResponseEntity<String> getAllUserAgents() throws IOException {
 
-        try {
-            File file = ResourceUtils.getFile("classpath:user-agents");
-            String userStrings = new String(Files.readAllBytes(file.toPath()));
+         try {
+            
+            Resource resource =new ClassPathResource("classpath:user-agents");
+            InputStream inputStream = resource.getInputStream();
+            byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
+            String data = new String(bdata, StandardCharsets.UTF_8);
 
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(userStrings);
+                    .body(data);
 
 
         } catch (IOException e) {
             e.printStackTrace();
-            
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error." + e.getMessage());
         }
-          
+
     }
 
 
