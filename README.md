@@ -22,4 +22,8 @@
 
 ![SS](https://github.com/fatihyildizli/spiderfy/blob/master/ss2.PNG)
 
+![deployment](https://avatars3.githubusercontent.com/u/23211?size=30) Deployment plugins
+
+- https://github.com/heroku/heroku-buildpack-google-chrome
+- https://github.com/heroku/heroku-buildpack-chromedriver
 
