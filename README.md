@@ -18,9 +18,6 @@
 - lombok 
 - SwaggerUI
 
-![SS](https://github.com/fatihyildizli/spiderfy/blob/master/ss.PNG)
-
-![SS](https://github.com/fatihyildizli/spiderfy/blob/master/ss2.PNG)
 
 ![deployment](https://avatars3.githubusercontent.com/u/23211?size=30) Deployment plugins
 
