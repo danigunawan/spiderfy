@@ -53,7 +53,6 @@ public class CrawlService {
         for (Element link : links) {
             UrlModel item = new UrlModel();
             item.setLink(link.attr("href").startsWith("http")?link.attr("href"):(url+link.attr("href")));
-            //takeScreenShot(item.getLink());   # Take screenshot from all links
             item.setText(link.text());
             items.add(item);
         }
@@ -256,46 +255,37 @@ public class CrawlService {
     }
 
 
-    public void takeScreenShot(String url) throws IOException {
+    public ResponseEntity<ScreenShootModelResponse>  takeScreenShot(String url) throws IOException {
       try
       {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.get(url);
-        final File screenShotOutputFile = new File("screenshot_" + generatetimeStampBasedRandomNumber() + ".png").getAbsoluteFile();
-        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(scrFile, screenShotOutputFile);
-        System.out.println("Took Screenshot for " + url + " saved at " + screenShotOutputFile);
-        driver.quit();
+
+          long start = System.currentTimeMillis();
+          ScreenShootModelResponse response = new ScreenShootModelResponse();
+          List<ScreenShootModel> items = new ArrayList<ScreenShootModel>();
+          ScreenShootModel item = new ScreenShootModel();
+          WebDriverManager.chromedriver().setup();
+          driver = new ChromeDriver();
+          driver.get(url);
+          String base64Data  = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+          item.setUrl(url);
+          item.setImage_base64("data:image/png;base64,"+base64Data);
+          items.add(item);
+          driver.quit();
+          long finish = System.currentTimeMillis();
+          long timeElapsed = finish - start;
+
+          response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+          response.setResults(items);
+
+          return ResponseEntity.status(HttpStatus.OK).body(response);
       }
       catch (Exception ex)
       {
           ex.printStackTrace();
       }
-    }
-
-
-    private static String generatetimeStampBasedRandomNumber() {
-
-        Date date = new Date();
-        long time = date.getTime();
-        Timestamp ts = new Timestamp(time);
-
-        String tst = ts.toString();
-
-        try {
-            tst = tst.substring(0, tst.length() - 4);
-            tst = tst.replace("-", "");
-            tst = tst.replace(" ", "");
-            tst = tst.replace(":", "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return tst;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ScreenShootModelResponse());
     }
 
     }
-
 
 
