@@ -6,13 +6,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,22 +19,33 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 
 @Component
 public class CrawlService {
 
-
+    static WebDriver driver;
 
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
 
-    public UrlModelResponse getLinks(String url)  {
+    public UrlModelResponse getLinks(String url) throws IOException {
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
         long start = System.currentTimeMillis();
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +53,7 @@ public class CrawlService {
         for (Element link : links) {
             UrlModel item = new UrlModel();
             item.setLink(link.attr("href").startsWith("http")?link.attr("href"):(url+link.attr("href")));
+            //takeScreenShot(item.getLink());   # Take screenshot from all links
             item.setText(link.text());
             items.add(item);
         }
@@ -246,24 +256,46 @@ public class CrawlService {
     }
 
 
-    public void takeScreenShot()
-    {
-        try {
-            System.setProperty("java.awt.headless", "false");
-            Robot robot = new Robot();
-            BufferedImage bi=robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-            ImageIO.write(bi, "jpg", new File("screenshot.jpg"));
+    public void takeScreenShot(String url) throws IOException {
+      try
+      {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.get(url);
+        final File screenShotOutputFile = new File("screenshot_" + generatetimeStampBasedRandomNumber() + ".png").getAbsoluteFile();
+        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(scrFile, screenShotOutputFile);
+        System.out.println("Took Screenshot for " + url + " saved at " + screenShotOutputFile);
+        driver.quit();
+      }
+      catch (Exception ex)
+      {
+          ex.printStackTrace();
+      }
+    }
 
-        } catch (AWTException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+
+    private static String generatetimeStampBasedRandomNumber() {
+
+        Date date = new Date();
+        long time = date.getTime();
+        Timestamp ts = new Timestamp(time);
+
+        String tst = ts.toString();
+
+        try {
+            tst = tst.substring(0, tst.length() - 4);
+            tst = tst.replace("-", "");
+            tst = tst.replace(" ", "");
+            tst = tst.replace(":", "");
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return tst;
     }
 
-
     }
-
 
 
 
