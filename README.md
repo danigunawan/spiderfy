@@ -13,6 +13,7 @@
 
 **Backend API :** https://spiderfy.herokuapp.com/swagger-ui.html
 - Spring boot
+- Selenium
 - Jsoup 
 - lombok 
 - SwaggerUI
