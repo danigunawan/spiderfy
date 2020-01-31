@@ -67,6 +67,35 @@ public class CrawlService {
         return response;
     }
 
+    public UrlModelResponse getLinksWithThumbnail(String url) throws IOException {
+        UrlModelResponse response = new UrlModelResponse();
+        List<UrlModel> items = new ArrayList< UrlModel>();
+        long start = System.currentTimeMillis();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).get();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements links = doc.select("a[href]");
+        for (Element link : links) {
+            UrlModel item = new UrlModel();
+            item.setLink(link.attr("href").startsWith("http")?link.attr("href"):(url+link.attr("href")));
+            item.setText(link.text());
+            item.setThumbnail(takeScreenShot(item.getLink()).getBody().getResults().get(0).getImage_base64());
+            items.add(item);
+        }
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+        response.setResults(items);
+
+
+
+        return response;
+    }
 
     public MetaTagsModelResponse getSiteInfo(String url) {
         MetaTagsModelResponse response = new MetaTagsModelResponse();
@@ -287,5 +316,3 @@ public class CrawlService {
     }
 
     }
-
-
