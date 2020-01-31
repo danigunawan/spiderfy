@@ -9,4 +9,5 @@ public class UrlModel {
 
     private String text;
     private String link;
+    private String thumbnail;
 }
