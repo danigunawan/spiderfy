@@ -96,4 +96,19 @@ CrawlService service;
     }
 
 
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/takescreenshoot/", method = RequestMethod.POST)
+    @ApiOperation(value = "Take screenshoot from given url.", notes = "Base64 format , Control : https://codebeautify.org/base64-to-image-converter")
+    @ResponseBody
+    public ResponseEntity<ScreenShootModelResponse> takeScreenShoot(@RequestBody String url) throws IOException {
+
+        return service.takeScreenShot(url);
+    }
+
 }
+
+
+
+
+
+
