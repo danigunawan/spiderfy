@@ -105,10 +105,16 @@ CrawlService service;
         return service.takeScreenShot(url);
     }
 
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/withthumbnail/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain all links with thumbnail.")
+    @ResponseBody
+    public UrlModelResponse  getLinksWithThumbnail(@RequestBody String url) throws IOException {
+
+        return service.getLinksWithThumbnail(url);
+    }
+
+
+
 }
-
-
-
-
-
 
