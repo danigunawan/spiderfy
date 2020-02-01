@@ -39,7 +39,7 @@
 
 
 #                             TECH STACK
-![techstack](https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/techstack.PNG)
+![techstack](https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/tech.PNG)
 
 
 ![deployment](https://avatars3.githubusercontent.com/u/23211?size=30) Deployment plugins
