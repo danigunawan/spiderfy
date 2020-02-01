@@ -15,6 +15,7 @@
 - Spring boot
 - Selenium
 - Jsoup 
+- Tesseract
 - lombok 
 - SwaggerUI
 
