@@ -1,9 +1,38 @@
 # spiderfy
 **🕷 crawling , 🕸 scraping | 👓Playground [proof of concepts]**
 
---This project is only proof of concepts, does not relate commercial use.
+**Url:** https://crawler.muradjs.now.sh/#
 
-**Frontend UI :** https://crawler.muradjs.now.sh/#
+**Project abilities**
+
+⭐️ To retrieve all links from given website.
+
+⭐️ To retrieve all images from given website.
+
+⭐️To retrieve all metatags from given website.
+
+⭐️To retrieve all sitemap nodes from given website.
+
+⭐️To retrieve all links from given sitemap url.
+
+⭐️To show 3500 user agent from static list.
+
+⭐️To insert randomly selected user agent on http request according to user agents static list
+
+⭐️To obtain only text without any html tags from given website.
+
+⭐️To obtain only all html source code from given website.
+
+⭐️To retrieve all links/link snapshoot on base64 format.
+
+⭐️To obtain top 50 sites in Turkey from Alexa.
+
+⭐️To obtain top 50 sites in Turkey from SimilarWeb.
+
+
+
+⚠️ This project is only proof of concepts, does not relate commercial use.
+
 
 #                             TECH STACK
 ![techstack](https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/techstack.PNG)
