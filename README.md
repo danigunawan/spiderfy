@@ -3,19 +3,17 @@
 
 --This project is only proof of concepts, does not relate commercial use.
 
-
 **Frontend UI :** https://crawler.muradjs.now.sh/#
 
-**Github repo:** https://github.com/muratumutlu/crawler-ui-reactjs 
-- React.js
-- Bootstrap
-- Axios
+#                             TECH STACK
+![techstack](https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/techstack.PNG)
+
 
 **Backend API :** https://spiderfy.herokuapp.com/swagger-ui.html
 - Spring boot
 - Selenium
 - Jsoup 
-- Tesseract
+- Tesseract OCR
 - lombok 
 - SwaggerUI
 
