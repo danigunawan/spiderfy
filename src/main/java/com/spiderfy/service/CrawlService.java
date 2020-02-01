@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -19,10 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.sql.Timestamp;
-import java.util.Date;
 
-import org.apache.commons.io.FileUtils;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -284,7 +280,7 @@ public class CrawlService {
     }
 
 
-    public ResponseEntity<ScreenShootModelResponse>  takeScreenShot(String url) throws IOException {
+    public ResponseEntity<ScreenShootModelResponse> takeScreenShot(String url) throws IOException {
       try
       {
 
@@ -316,3 +312,10 @@ public class CrawlService {
     }
 
     }
+
+
+
+
+
+
+
