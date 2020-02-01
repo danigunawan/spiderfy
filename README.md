@@ -3,6 +3,8 @@
 
 **Url:** https://crawler.muradjs.now.sh/#
 
+**Backend API:** https://spiderfy.herokuapp.com/swagger-ui.html
+
 **Project abilities**
 
 ⭐️ To retrieve all links from given website.
@@ -38,15 +40,6 @@
 
 #                             TECH STACK
 ![techstack](https://raw.githubusercontent.com/fatihyildizli/spiderfy/master/techstack.PNG)
-
-
-**Backend API :** https://spiderfy.herokuapp.com/swagger-ui.html
-- Spring boot
-- Selenium
-- Jsoup 
-- Tesseract OCR
-- lombok 
-- SwaggerUI
 
 
 ![deployment](https://avatars3.githubusercontent.com/u/23211?size=30) Deployment plugins
