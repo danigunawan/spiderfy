@@ -24,8 +24,7 @@ public class OcrService {
             byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
             BufferedImage in =  ImageIO.read(new ByteArrayInputStream(imageBytes));
             instance.setLanguage(request.getDestinationLanguage());
-            instance.setDatapath("//app//tessdata");  // Settings for heroku.
-            //instance.setDatapath(System.getProperty("user.dir")+"//tessdata");  -Settings for Local PC
+            instance.setDatapath("src/main/resources/tessdata");
             return instance.doOCR(in);
 
         }
