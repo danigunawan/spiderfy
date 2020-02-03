@@ -25,7 +25,6 @@ public class OcrService {
             BufferedImage in =  ImageIO.read(new ByteArrayInputStream(imageBytes));
             instance.setLanguage(request.getDestinationLanguage());
             instance.setDatapath("src/main/resources/tessdata");
-            //instance.setDatapath(System.getProperty("user.dir")+"//tessdata");  -Settings for Local PC
             return instance.doOCR(in);
 
         }
