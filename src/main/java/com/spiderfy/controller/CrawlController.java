@@ -29,9 +29,9 @@ CrawlService service;
     @RequestMapping(path = "/getAudiophileInfos/", method = RequestMethod.POST)
     @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.audiophile.org/Kategori/Amplifikatorler/")
     @ResponseBody
-    public UrlModelResponse getAudiophileInfos(@RequestBody String url ,String offset) throws Exception {
+    public UrlModelResponse getAudiophileInfos(@RequestBody String url ,String offset,String categoryId,String parentCategoryId) throws Exception {
 
-        return service.getAudiophileInfos(url,offset);
+        return service.getAudiophileInfos(url,offset,categoryId,parentCategoryId);
 
     }
 

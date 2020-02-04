@@ -27,10 +27,16 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class CrawlService {
+
+    @Value("${uname}")
+    private String uname;
+
+    @Value("${pw}")
+    private String pw;
 
     static WebDriver driver;
 
@@ -68,11 +74,11 @@ public class CrawlService {
         return response;
     }
 
-    public UrlModelResponse getAudiophileInfos(String url,String offset) throws IOException {
+    public UrlModelResponse getAudiophileInfos(String url,String offset,String categoryId,String parentCategoryId) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         String result="";
         Connection.Response res = Jsoup.connect("https://www.audiophile.org/GirisYap")
-                .data("username", "ekpln", "password", "198994")
+                .data("username", uname, "password", pw)
                 .method(Connection.Method.POST)
                 .execute();
 
@@ -82,8 +88,8 @@ public class CrawlService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("offset", offset);
-        map.add("categoryId","0");
-        map.add("parentCategoryId","1");
+        map.add("categoryId",categoryId);
+        map.add("parentCategoryId",parentCategoryId);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 

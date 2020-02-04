@@ -1,0 +1,13 @@
+package com.spiderfy.model;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+public class SitemapModelResponse {
+
+    private String elapsedTime;
+    List<SitemapModel> results;
+}
