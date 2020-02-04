@@ -68,7 +68,7 @@ public class CrawlService {
         return response;
     }
 
-    public UrlModelResponse getAudiophileInfos(String url,String offset) throws IOException {
+     public UrlModelResponse getAudiophileInfos(String url,String offset,String categoryId,String parentCategoryId) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         String result="";
         Connection.Response res = Jsoup.connect("https://www.audiophile.org/GirisYap")
@@ -82,8 +82,8 @@ public class CrawlService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("offset", offset);
-        map.add("categoryId","0");
-        map.add("parentCategoryId","1");
+        map.add("categoryId",categoryId);
+        map.add("parentCategoryId",parentCategoryId);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
