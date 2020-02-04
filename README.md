@@ -1,4 +1,4 @@
-# spiderfy
+# 🕸spiderfy🕸
 **🕷 crawling , 🕸 scraping | 👓Playground [proof of concepts]**
 
 **Url:** https://crawler.muradjs.now.sh/#
