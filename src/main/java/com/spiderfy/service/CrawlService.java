@@ -32,12 +32,6 @@ import org.springframework.beans.factory.annotation.Value;
 @Component
 public class CrawlService {
 
-    @Value("${uname}")
-    private String uname;
-
-    @Value("${pw}")
-    private String pw;
-
     static WebDriver driver;
 
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
@@ -72,86 +66,6 @@ public class CrawlService {
 
 
         return response;
-    }
-
-
-     public UrlModelResponse getAudiophileInfos(String url,String offset,String categoryId,String parentCategoryId) throws IOException {
-
-        RestTemplate restTemplate = new RestTemplate();
-        String result="";
-        Connection.Response res = Jsoup.connect("https://www.audiophile.org/GirisYap")
-                .data("username", uname, "password", pw)
-                .method(Connection.Method.POST)
-                .execute();
-
-        Map<String, String> loginCookies = res.cookies();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("offset", offset);
-        map.add("categoryId",categoryId);
-        map.add("parentCategoryId",parentCategoryId);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-        ResponseEntity<List<AudiophileModel>>  responseAdvertList = restTemplate.exchange("https://www.audiophile" +
-                ".org/Category/GetAdvertsList" , HttpMethod.POST,request , new ParameterizedTypeReference<List<AudiophileModel>>() {});
-
-       List<AudiophileModel> resultAdvert= responseAdvertList.getBody();
-
-        UrlModelResponse response = new UrlModelResponse();
-        List<UrlModel> items = new ArrayList< UrlModel>();
-        long start = System.currentTimeMillis();
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(url).cookies(loginCookies).get();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        int index=1;
-       for(AudiophileModel advert:resultAdvert)
-       {
-
-
-               String links="#tableCategories > tbody > tr:nth-child(__INDEX__) > td:nth-child(3) > a";
-               Elements addresses=doc.select(links.replace("tr:nth-child(__INDEX__)",
-                       "tr:nth-child("+String.valueOf(index)+")"));
-
-
-               String subUrl = "https://www.audiophile.org/"+advert.getUrl();
-
-
-               Document subdoc = Jsoup.connect(subUrl).cookies(loginCookies).get();
-
-               Elements email = subdoc.select("#urundetay-altsayfa > div > div.urun-content > div > div.div-block-9.div-sag > div:nth-child(8) > a");
-               Elements telephone= subdoc.select("#urundetay-altsayfa > div > div.urun-content > div > div.div-block-9.div-sag > div:nth-child(9) > a");
-               UrlModel item = new UrlModel();
-               item.setLink(subUrl);
-               item.setText(email.attr("title"));
-               item.setThumbnail(telephone.attr("title"));
-               items.add(item);
-
-
-
-               links.replace("tr:nth-child("+String.valueOf(index)+")","tr:nth-child(__INDEX__)");
-
-               System.out.println("Sites crawled:"+String.valueOf(index));
-               index++;
-           }
-
-
-
-        long finish = System.currentTimeMillis();
-        long timeElapsed = finish - start;
-
-        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
-        response.setResults(items);
-
-        return response;
-
     }
 
     public UrlModelResponse getLinksWithThumbnail(String url) throws IOException {

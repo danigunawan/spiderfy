@@ -25,16 +25,6 @@ CrawlService service;
         return service.getLinks(url);
     }
 
-    @CrossOrigin(origins = { "*" })
-    @RequestMapping(path = "/getAudiophileInfos/", method = RequestMethod.POST)
-    @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.audiophile.org/Kategori/Amplifikatorler/")
-    @ResponseBody
-    public UrlModelResponse getAudiophileInfos(@RequestBody String url ,String offset,String categoryId,String parentCategoryId) throws Exception {
-
-        return service.getAudiophileInfos(url,offset,categoryId,parentCategoryId);
-
-    }
-
 
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/metatags/", method = RequestMethod.POST)
@@ -122,7 +112,6 @@ CrawlService service;
 
         return service.getLinksWithThumbnail(url);
     }
-
 
 
 }
