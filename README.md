@@ -19,6 +19,8 @@
 
 ⭐️To convert base64 to text (OCR function) from given snapshoot.
 
+⭐️To retrieve all RSS Feeds from given RSS url.
+
 ⭐️To show 3500 user agent from static list.
 
 ⭐️To insert randomly selected user agent on http request according to user agents static list
