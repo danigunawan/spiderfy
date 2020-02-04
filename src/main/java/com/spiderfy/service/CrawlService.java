@@ -75,6 +75,8 @@ public class CrawlService {
     }
 
     public UrlModelResponse getAudiophileInfos(String url,String offset,String categoryId,String parentCategoryId) throws IOException {
+     public UrlModelResponse getAudiophileInfos(String url,String offset,String categoryId,String parentCategoryId) throws IOException {
+>>>>>>> 21ebb4b3e1701ab1f5f7f1ba8d8179bac3c513c8
         RestTemplate restTemplate = new RestTemplate();
         String result="";
         Connection.Response res = Jsoup.connect("https://www.audiophile.org/GirisYap")
