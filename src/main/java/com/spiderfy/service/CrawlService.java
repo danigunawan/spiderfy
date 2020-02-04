@@ -1,14 +1,11 @@
 package com.spiderfy.service;
 
-
 import com.spiderfy.model.*;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -17,17 +14,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.beans.factory.annotation.Value;
+
 
 @Component
 public class CrawlService {
@@ -316,7 +307,52 @@ public class CrawlService {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ScreenShootModelResponse());
     }
 
+
+
+
+    public RssFeedModelResponse getRssFeed(String rssUrl) {
+
+
+        RssFeedModelResponse response = new RssFeedModelResponse();
+        List<RssFeedModel> items = new ArrayList<RssFeedModel>();
+        long start = System.currentTimeMillis();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(rssUrl).get();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+            Elements links = doc.select("item");
+            for (Element link : links) {
+
+                RssFeedModel item = new RssFeedModel();
+                item.setGuid(link.select("guid").text());
+                item.setLink(link.select("link").text());
+                item.setDescription( link.select("description").text());
+                item.setTitle(link.select("title").text());
+                item.setPublishDate(link.select("pubDate").text());
+                item.setRelatedImage(link.select("enclosure").attr("url"));
+                items.add(item);
+
+            }
+            long finish = System.currentTimeMillis();
+            long timeElapsed = finish - start;
+
+            response.setNumberOfRecords(items.size());
+            response.setResource(rssUrl);
+            response.setElapsedTime(String.valueOf(timeElapsed) + "ms");
+            response.setResults(items);
+
+            return response;
+
     }
+
+
+}
 
 
 

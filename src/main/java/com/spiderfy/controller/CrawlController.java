@@ -1,5 +1,6 @@
 package com.spiderfy.controller;
 
+
 import com.spiderfy.model.*;
 import com.spiderfy.service.CrawlService;
 import io.swagger.annotations.ApiOperation;
@@ -112,6 +113,20 @@ CrawlService service;
 
         return service.getLinksWithThumbnail(url);
     }
+
+
+
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/crawl/rss/", method = RequestMethod.POST)
+    @ApiOperation(value = "Get Rss feed from given rss url.", notes = "Ex: https://www.hurriyet.com.tr/rss/gundem , " +
+            "https://rss.haberler.com/rss.asp?kategori=sondakika")
+    @ResponseBody
+    public RssFeedModelResponse  getRssFeed(@RequestBody String rssUrl) throws IOException {
+
+        return service.getRssFeed(rssUrl);
+    }
+
+
 
 
 }
