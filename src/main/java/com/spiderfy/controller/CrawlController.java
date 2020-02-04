@@ -22,7 +22,17 @@ CrawlService service;
     @ResponseBody
     public UrlModelResponse getLinks(@RequestBody String url) throws Exception {
 
-       return service.getLinks(url);
+        return service.getLinks(url);
+    }
+
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/getAudiophileInfos/", method = RequestMethod.POST)
+    @ApiOperation(value = "Obtain all links ", notes = "Ex: https://www.audiophile.org/Kategori/Amplifikatorler/")
+    @ResponseBody
+    public UrlModelResponse getAudiophileInfos(@RequestBody String url ,String offset) throws Exception {
+
+        return service.getAudiophileInfos(url,offset);
+
     }
 
 

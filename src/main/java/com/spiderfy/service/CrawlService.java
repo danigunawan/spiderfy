@@ -2,22 +2,21 @@ package com.spiderfy.service;
 
 
 import com.spiderfy.model.*;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 import org.openqa.selenium.OutputType;
@@ -25,6 +24,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 
 @Component
@@ -35,6 +37,7 @@ public class CrawlService {
     private final String SITEMAP_FILE_NAME="/sitemap.xml";
 
     public UrlModelResponse getLinks(String url) throws IOException {
+
         UrlModelResponse response = new UrlModelResponse();
         List<UrlModel> items = new ArrayList< UrlModel>();
         long start = System.currentTimeMillis();
@@ -46,7 +49,9 @@ public class CrawlService {
             e.printStackTrace();
         }
         Elements links = doc.select("a[href]");
-        for (Element link : links) {
+
+
+      for (Element link : links) {
             UrlModel item = new UrlModel();
             item.setLink(link.attr("href").startsWith("http")?link.attr("href"):(url+link.attr("href")));
             item.setText(link.text());
@@ -61,6 +66,84 @@ public class CrawlService {
 
 
         return response;
+    }
+
+    public UrlModelResponse getAudiophileInfos(String url,String offset) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+        String result="";
+        Connection.Response res = Jsoup.connect("https://www.audiophile.org/GirisYap")
+                .data("username", "ekpln", "password", "198994")
+                .method(Connection.Method.POST)
+                .execute();
+
+        Map<String, String> loginCookies = res.cookies();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("offset", offset);
+        map.add("categoryId","0");
+        map.add("parentCategoryId","1");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<List<AudiophileModel>>  responseAdvertList = restTemplate.exchange("https://www.audiophile" +
+                ".org/Category/GetAdvertsList" , HttpMethod.POST,request , new ParameterizedTypeReference<List<AudiophileModel>>() {});
+
+       List<AudiophileModel> resultAdvert= responseAdvertList.getBody();
+
+        UrlModelResponse response = new UrlModelResponse();
+        List<UrlModel> items = new ArrayList< UrlModel>();
+        long start = System.currentTimeMillis();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).cookies(loginCookies).get();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int index=1;
+       for(AudiophileModel advert:resultAdvert)
+       {
+
+
+               String links="#tableCategories > tbody > tr:nth-child(__INDEX__) > td:nth-child(3) > a";
+               Elements addresses=doc.select(links.replace("tr:nth-child(__INDEX__)",
+                       "tr:nth-child("+String.valueOf(index)+")"));
+
+
+               String subUrl = "https://www.audiophile.org/"+advert.getUrl();
+
+
+               Document subdoc = Jsoup.connect(subUrl).cookies(loginCookies).get();
+
+               Elements email = subdoc.select("#urundetay-altsayfa > div > div.urun-content > div > div.div-block-9.div-sag > div:nth-child(8) > a");
+               Elements telephone= subdoc.select("#urundetay-altsayfa > div > div.urun-content > div > div.div-block-9.div-sag > div:nth-child(9) > a");
+               UrlModel item = new UrlModel();
+               item.setLink(subUrl);
+               item.setText(email.attr("title"));
+               item.setThumbnail(telephone.attr("title"));
+               items.add(item);
+
+
+
+               links.replace("tr:nth-child("+String.valueOf(index)+")","tr:nth-child(__INDEX__)");
+
+               System.out.println("Sites crawled:"+String.valueOf(index));
+               index++;
+           }
+
+
+
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+
+        response.setElapsedTime(String.valueOf(timeElapsed)+"ms");
+        response.setResults(items);
+
+        return response;
+
     }
 
     public UrlModelResponse getLinksWithThumbnail(String url) throws IOException {
