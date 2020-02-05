@@ -351,7 +351,7 @@ public class CrawlService {
     }
 
 
-    public List<RssFeedModelResponse> getAllRssFeed() {
+    public List<RssFeedModelResponse> getAllRssFeed(Integer offset,Integer numberOfNewsSite) {
         List<RssFeedModelResponse> response = new ArrayList<RssFeedModelResponse>();
 
 
@@ -473,7 +473,7 @@ public class CrawlService {
 
         try {
 
-            for (String rssFeed : rssList) {
+            for (String rssFeed : java.util.Arrays.copyOfRange(rssList,offset,numberOfNewsSite)) {
                 System.out.println("Start : " + rssFeed);
 
                 RssFeedModelResponse item;

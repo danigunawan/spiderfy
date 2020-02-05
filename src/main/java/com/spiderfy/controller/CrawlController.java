@@ -130,11 +130,11 @@ CrawlService service;
 
     @CrossOrigin(origins = { "*" })
     @RequestMapping(path = "/crawl/getAllRssFeed/", method = RequestMethod.GET)
-    @ApiOperation(value = "Get All Rss.")
+    @ApiOperation(value = "Get All Rss.", notes = "Timeout 30 second , offset 0 first news source")
     @ResponseBody
-    public List<RssFeedModelResponse> getAllRssFeed() {
+    public List<RssFeedModelResponse> getAllRssFeed(@RequestParam Integer offset,@RequestParam Integer numberOfNewsSite) {
 
-        return service.getAllRssFeed();
+        return service.getAllRssFeed(offset,numberOfNewsSite);
     }
 
 
