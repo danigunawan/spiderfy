@@ -1,5 +1,6 @@
 package com.spiderfy.controller;
 import com.spiderfy.model.AnalyticModelResponse;
+import com.spiderfy.model.JsInfoModelResponse;
 import com.spiderfy.service.AnalyticService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,16 @@ public class AnalyticController {
     {
       return service.getSimilarWebTop50();
     }
+
+    @CrossOrigin(origins = { "*" })
+    @RequestMapping(path = "/analytic/getAllJsFileSummary/", method = RequestMethod.GET)
+    @ApiOperation(value = "Get All JS files and sizes." ,notes = "Offset = 0, limit = 0 for getting all datas.")
+    @ResponseBody
+    public JsInfoModelResponse getAllJsFileSummary(@RequestParam String url, @RequestParam Integer offset,
+                                                   @RequestParam Integer limit) {
+
+        return service.getAllJsFileSummary(url,offset,limit);
+    }
+
 
 }
