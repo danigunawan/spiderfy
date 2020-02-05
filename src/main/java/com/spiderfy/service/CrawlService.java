@@ -46,9 +46,11 @@ public class CrawlService {
 
         for (Element link : links) {
             UrlModel item = new UrlModel();
-            item.setLink(link.attr("href").startsWith("http") ? link.attr("href") : (url + link.attr("href")));
-            item.setText(link.text());
-            items.add(item);
+            if (!link.attr("abs:href").equals("")) {
+                item.setLink(link.attr("abs:href"));
+                item.setText(link.text());
+                items.add(item);
+            }
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
@@ -74,10 +76,12 @@ public class CrawlService {
         Elements links = doc.select("a[href]");
         for (Element link : links) {
             UrlModel item = new UrlModel();
-            item.setLink(link.attr("href").startsWith("http") ? link.attr("href") : (url + link.attr("href")));
-            item.setText(link.text());
-            item.setThumbnail(takeScreenShot(item.getLink()).getBody().getResults().get(0).getImage_base64());
-            items.add(item);
+            if (!link.attr("abs:href").equals("")) {
+                item.setLink(link.attr("abs:href"));
+                item.setText(link.text());
+                item.setThumbnail(takeScreenShot(item.getLink()).getBody().getResults().get(0).getImage_base64());
+                items.add(item);
+            }
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
@@ -159,10 +163,11 @@ public class CrawlService {
         Elements links = doc.getElementsByTag("loc");
         for (Element link : links) {
             SitemapModel item = new SitemapModel();
-            item.setLoc(link.attr("loc"));
-            item.setText(link.text());
-            items.add(item);
-
+            if (!link.attr("loc").equals("")) {
+                item.setLoc(link.attr("loc"));
+                item.setText(link.text());
+                items.add(item);
+            }
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
@@ -185,12 +190,14 @@ public class CrawlService {
         Elements imgs = doc.getElementsByTag("img");
         for (Element img : imgs) {
             ImageModel item = new ImageModel();
-            item.setSrc(img.attr("src").startsWith("http") ? img.attr("src") : (url + img.attr("src")));
-            item.setAlt(img.attr("alt"));
-            item.setWidth(img.attr("width"));
-            item.setHeight(img.attr("height"));
+            if (!img.attr("abs:src").equals("")) {
+                item.setSrc(img.attr("abs:src"));
+                item.setAlt(img.attr("alt"));
+                item.setWidth(img.attr("width"));
+                item.setHeight(img.attr("height"));
 
-            items.add(item);
+                items.add(item);
+            }
         }
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
@@ -326,14 +333,15 @@ public class CrawlService {
             for (Element link : links) {
 
                 RssFeedModel item = new RssFeedModel();
-                item.setGuid(link.select("guid").text());
-                item.setLink(link.select("link").text());
-                item.setDescription(link.select("description").text());
-                item.setTitle(link.select("title").text());
-                item.setPublishDate(link.select("pubDate").text());
-                item.setRelatedImage(link.select("enclosure").attr("url"));
-                items.add(item);
-
+                if (!(link.select("link").text()).equals("")) {
+                    item.setGuid(link.select("guid").text());
+                    item.setLink(link.select("link").text());
+                    item.setDescription(link.select("description").text());
+                    item.setTitle(link.select("title").text());
+                    item.setPublishDate(link.select("pubDate").text());
+                    item.setRelatedImage(link.select("enclosure").attr("url"));
+                    items.add(item);
+                }
             }
             long finish = System.currentTimeMillis();
             long timeElapsed = finish - start;
@@ -351,7 +359,7 @@ public class CrawlService {
     }
 
 
-    public List<RssFeedModelResponse> getAllRssFeed(Integer offset,Integer numberOfNewsSite) {
+    public List<RssFeedModelResponse> getAllRssFeed(Integer offset, Integer numberOfNewsSite) {
         List<RssFeedModelResponse> response = new ArrayList<RssFeedModelResponse>();
 
 
@@ -473,7 +481,7 @@ public class CrawlService {
 
         try {
 
-            for (String rssFeed : java.util.Arrays.copyOfRange(rssList,offset,numberOfNewsSite)) {
+            for (String rssFeed : java.util.Arrays.copyOfRange(rssList, offset, numberOfNewsSite)) {
                 System.out.println("Start : " + rssFeed);
 
                 RssFeedModelResponse item;
