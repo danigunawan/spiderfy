@@ -21,6 +21,8 @@
 
 `⭐️To retrieve all RSS Feeds from given RSS url.`
 
+`⭐️To summary all javascript files usage (Content length, file size) from given website.`
+
 `⭐️To retrieve Turkey RSS News Feeds from RSS list.`
 
 `⭐️To show 3500 user agent from static list.`
