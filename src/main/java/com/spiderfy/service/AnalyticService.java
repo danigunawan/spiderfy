@@ -1,17 +1,24 @@
 package com.spiderfy.service;
 
+import com.itextpdf.text.*;
 import com.spiderfy.model.AnalyticModelResponse;
 import com.spiderfy.model.JsInfoModel;
 import com.spiderfy.model.JsInfoModelResponse;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
+
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Component
 public class AnalyticService {
@@ -26,7 +33,7 @@ public class AnalyticService {
     public List<AnalyticModelResponse> getAlexaTop50() {
         List<AnalyticModelResponse> response = new ArrayList<AnalyticModelResponse>();
 
-        Document doc = null;
+        org.jsoup.nodes.Document doc = null;
         try {
             doc = Jsoup.connect(ALEXA_TOP_50_URL).get();
         } catch (IOException e) {
@@ -36,7 +43,7 @@ public class AnalyticService {
         for (int index = 2; index <= 51; index++) {
 
             Elements links = doc.select(ALEXA_TOP_50_CSS_SELECT_QUERY.replace("__INDEX__", String.valueOf(index)));
-            for (Element link : links) {
+            for (org.jsoup.nodes.Element link : links) {
                 AnalyticModelResponse responseItem = new AnalyticModelResponse();
                 responseItem.setRank(String.valueOf(index - 1));
                 responseItem.setSiteInfo(link.attr("href") == null ? "null" : String.format(ALEXA_INFO_PREFIX + link.attr("href")));
@@ -52,7 +59,7 @@ public class AnalyticService {
 
     public List<AnalyticModelResponse> getSimilarWebTop50() {
         List<AnalyticModelResponse> response = new ArrayList<AnalyticModelResponse>();
-        Document doc = null;
+        org.jsoup.nodes.Document doc = null;
         try {
             doc = Jsoup.connect(SIMILARWEB_TOP_50_URL).get();
         } catch (IOException e) {
@@ -62,7 +69,7 @@ public class AnalyticService {
         for (int index = 1; index <= 51; index++) {
             Elements links = doc.select(SIMILARWEB_TOP_50_CSS_SELECT_QUERY.replace("__INDEX__", String.valueOf(index)));
 
-            for (Element link : links) {
+            for (org.jsoup.nodes.Element link : links) {
                 AnalyticModelResponse responseItem = new AnalyticModelResponse();
 
                 responseItem.setRank(String.valueOf(index));
@@ -82,21 +89,20 @@ public class AnalyticService {
         JsInfoModelResponse response = new JsInfoModelResponse();
         List<JsInfoModel> modelList = new ArrayList<JsInfoModel>();
         long start = System.currentTimeMillis();
-        Document doc = null;
+        org.jsoup.nodes.Document doc = null;
         String fileSize = "";
         String fileUrl = "";
-        Integer documentCount=0;
+        Integer documentCount = 0;
 
         try {
             doc = Jsoup.connect(url).get();
 
-            List<Element> links =  (offset.equals(0) && limit.equals(0))? doc.select("script"): doc.select("script").subList(offset, limit);
-            List<Element> linkRel = doc.select("link");
+            List<org.jsoup.nodes.Element> links = (offset.equals(0) && limit.equals(0)) ? doc.select("script") : doc.select("script").subList(offset, limit);
+            List<org.jsoup.nodes.Element> linkRel = doc.select("link");
 
-            for (Element link : links) {
+            for (org.jsoup.nodes.Element link : links) {
                 JsInfoModel item = new JsInfoModel();
-                if (!link.attr("abs:src").isEmpty())
-                {
+                if (!link.attr("abs:src").isEmpty()) {
                     documentCount++;
                     // Condition is for //example.com/js
                     fileUrl = link.attr("abs:src").startsWith("//") ? ("http://" + link.attr("abs:src").replace(url +
@@ -105,11 +111,10 @@ public class AnalyticService {
 
 
                     // Condition is for /example.com/js
-                    if(link.attr("abs:src").substring(0,1).equals("/") && !link.attr("abs:src").substring(1,2).equals(
-                            "/"))
-                    {
+                    if (link.attr("abs:src").substring(0, 1).equals("/") && !link.attr("abs:src").substring(1, 2).equals(
+                            "/")) {
 
-                        fileUrl = url +link.attr("abs:src");
+                        fileUrl = url + link.attr("abs:src");
 
                     }
 
@@ -124,10 +129,9 @@ public class AnalyticService {
                 }
             }
 
-            for (Element link : linkRel) {
+            for (org.jsoup.nodes.Element link : linkRel) {
                 JsInfoModel item = new JsInfoModel();
-                if (!link.attr("as").isEmpty() && link.attr("as").equals("script"))
-                {
+                if (!link.attr("as").isEmpty() && link.attr("as").equals("script")) {
 
                     // Condition is for //example.com/js
                     fileUrl = link.attr("abs:href").startsWith("//") ? ("http://" + link.attr("abs:href").replace(url +
@@ -136,11 +140,10 @@ public class AnalyticService {
 
 
                     // Condition is for /example.com/js
-                    if(link.attr("abs:href").substring(0,1).equals("/") && !link.attr("abs:href").substring(1,2).equals(
-                            "/"))
-                    {
+                    if (link.attr("abs:href").substring(0, 1).equals("/") && !link.attr("abs:href").substring(1, 2).equals(
+                            "/")) {
 
-                        fileUrl = url +link.attr("abs:href");
+                        fileUrl = url + link.attr("abs:href");
 
                     }
 
@@ -170,5 +173,53 @@ public class AnalyticService {
             return null;
         }
     }
+
+
+    public ByteArrayOutputStream generatePdf(String url) throws IOException, DocumentException {
+
+        try {
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, baos);
+
+            document.open();
+            Font font = FontFactory.getFont(FontFactory.COURIER, 8, BaseColor.BLACK);
+
+            PdfPTable table = new PdfPTable(3);
+
+            PdfPCell c1 = new PdfPCell(new Phrase("Javascript File Url"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Javascript File Size"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Javascript Content Length"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+            table.setHeaderRows(1);
+            JsInfoModelResponse items = getAllJsFileSummary(url, 0, 0);
+            for (JsInfoModel item : items.getResults()) {
+
+                table.addCell(String.valueOf(new Chunk(item.getJsFileAddress(), font)));
+                table.addCell(String.valueOf(new Chunk(item.getJsFileSize(), font)));
+                table.addCell(String.valueOf(new Chunk(String.valueOf(item.getJsContentLength()), font)));
+
+            }
+
+            document.add(table);
+            document.close();
+            return baos;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+
+            return new ByteArrayOutputStream();
+        }
+
+    }
+
 
 }

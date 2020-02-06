@@ -10,4 +10,6 @@ public class JsInfoModelResponse {
     private String elapsedTime;
     private Integer documentCount;
     List<JsInfoModel> results;
+
+
 }
