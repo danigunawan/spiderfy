@@ -85,12 +85,10 @@ public class AnalyticService {
         Document doc = null;
         String fileSize = "";
         String fileUrl = "";
-        Integer documentCount;
+        Integer documentCount=0;
 
         try {
             doc = Jsoup.connect(url).get();
-
-            documentCount = doc.select("script").size();
 
             List<Element> links =  (offset.equals(0) && limit.equals(0))? doc.select("script"): doc.select("script").subList(offset, limit);
             List<Element> linkRel = doc.select("link");
@@ -99,7 +97,7 @@ public class AnalyticService {
                 JsInfoModel item = new JsInfoModel();
                 if (!link.attr("abs:src").isEmpty())
                 {
-
+                    documentCount++;
                     // Condition is for //example.com/js
                     fileUrl = link.attr("abs:src").startsWith("//") ? ("http://" + link.attr("abs:src").replace(url +
                             "//", "")) :
