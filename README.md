@@ -23,6 +23,8 @@
 
 `⭐️To summary all javascript files usage (Content length, file size) from given website.`
 
+`⭐️To generate PDF - all javascript files usage summary(Content length, file size) from given website.`
+
 `⭐️To retrieve Turkey RSS News Feeds from RSS list.`
 
 `⭐️To show 3500 user agent from static list.`
